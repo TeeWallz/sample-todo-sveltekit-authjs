@@ -1,7 +1,7 @@
 <script lang="ts">
-    import type { ActionData } from './$types';
-
-    export let form: ActionData;
+    import type { ActionData } from "./$types";
+    import { signIn, signOut } from "@auth/sveltekit/client";
+    import { page } from "$app/stores";
 </script>
 
 <div>
@@ -21,80 +21,30 @@
                 <h2 class="text-2xl font-bold text-gray-900 lg:text-3xl">
                     Sign in to your account
                 </h2>
-                <form class="mt-8" action="#" method="post">
-                    {#if form?.missing}
-                        <p class="text-red-600 my-2">Missing field required!</p>
-                    {/if}
-                    {#if form?.invalid}
-                        <p class="text-red-600 my-2">
-                            Invalid email and password combination!
-                        </p>
-                    {/if}
-                    <div class="mb-6">
-                        <label
-                            for="email"
-                            class="block mb-2 text-sm font-medium text-gray-900"
-                        >
-                            Your email
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                            placeholder="Email address"
-                            value={form?.email ?? ''}
-                            required
+                {#if $page.data.session}
+                    {#if $page.data.session.user?.image}
+                        <span
+                            style="background-image: url('{$page.data.session
+                                .user.image}')"
+                            class="avatar"
                         />
-                    </div>
-                    <div class="mb-6">
-                        <label
-                            for="password"
-                            class="block mb-2 text-sm font-medium text-gray-900"
+                    {/if}
+                    <span class="signedInText">
+                        <small>Signed in as</small><br />
+                        <strong
+                            >{$page.data.session.user?.name ?? "User"}</strong
                         >
-                            Your password
-                        </label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            placeholder="••••••••"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                            value={form?.password ?? ''}
-                            required
-                        />
-                    </div>
-                    <div class="flex items-start">
-                        <div class="flex items-start">
-                            <div class="flex items-center h-5">
-                                <input
-                                    id="remember"
-                                    aria-describedby="remember"
-                                    name="remember"
-                                    type="checkbox"
-                                    class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300"
-                                />
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <label
-                                    for="remember"
-                                    class="font-medium text-gray-900"
-                                >
-                                    Remember me
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary mt-4" type="submit">
-                        Login to your account
-                    </button>
-                    <div class="mt-4 text-sm font-medium text-gray-500">
-                        Not registered? {' '}
-                        <a href="/signup" class="text-primary-700">
-                            Create Account
-                        </a>
-                    </div>
-                </form>
+                    </span>
+                    <button on:click={() => signOut()} class="button"
+                        >Sign out</button
+                    >
+                {:else}
+                    <span class="notSignedInText">You are not signed in</span>
+                    <br />
+                    <button on:click={() => signIn("github")}
+                        >Sign In with GitHub</button
+                    >
+                {/if}
             </div>
         </div>
     </div>

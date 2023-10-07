@@ -35,13 +35,13 @@ https://sample-todo-sveltekit.vercel.app/
 1. Install dependencies
 
     ```bash
-    npm install
+    yarn install
     ```
 
 1. Generate server and client-side code from model
 
     ```bash
-    npm run generate
+    yarn run generate
     ```
 
 1. Synchronize database schema

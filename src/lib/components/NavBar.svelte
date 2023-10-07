@@ -1,9 +1,10 @@
 <script lang="ts">
-    import type { Space, User } from '@prisma/client';
-    import { getContext } from 'svelte';
-    import Avatar from './Avatar.svelte';
+    import type { Space, User } from "@prisma/client";
+    import { signOut } from "@auth/sveltekit/client";
+    import { getContext } from "svelte";
+    import Avatar from "./Avatar.svelte";
 
-    const user = getContext<User>('currentUser');
+    const user = getContext<User>("currentUser");
 
     export let space: Space | undefined = undefined;
 </script>
@@ -15,7 +16,7 @@
             <div
                 class="text-xl font-semibold ml-2 text-slate-700 hidden md:inline-block"
             >
-                {space?.name || 'Welcome Todo App'}
+                {space?.name || "Welcome Todo App"}
             </div>
             <p class="text-xs ml-2 text-gray-500 self-end">
                 Powered by ZenStack
@@ -36,9 +37,9 @@
                     {#if user}<div>{user.name || user.email}</div>{/if}
                 </li>
                 <li>
-                    <form method="POST" action="/api/auth/signout">
-                        <input type="submit" value="Logout" />
-                    </form>
+                    <button on:click={() => signOut()} class="cursor-pointer">
+                        Sign out
+                    </button>
                 </li>
             </ul>
         </div>
